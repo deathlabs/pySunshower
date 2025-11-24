@@ -15,16 +15,13 @@ jobs:
         run: python -m pip install black
       - name: Clone the repository
         uses: actions/checkout@v4
-      - name: Scan for secrets
+      - name: Check for secrets
         id: trufflehog
         uses: trufflesecurity/trufflehog@main
-        continue-on-error: true
+        continue-on-error: false
         with:
           head: HEAD
           extra_args: --debug
-      - name: Check secrets scan results
-        if: steps.trufflehog.outcome == 'failure'
-        run: exit 1
       - name: Check for QA
         run: black --diff --color --check .
   pre-build-scan:
