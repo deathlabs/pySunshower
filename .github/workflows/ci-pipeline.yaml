@@ -1,0 +1,30 @@
+---
+name: Continuous Integration
+on:
+  push
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Install pip
+        run: python -m pip install black
+      - name: Clone the repository
+        uses: actions/checkout@v4
+      - name: Check for QA
+        run: black --diff --color --check .
+  pre-build-scan:
+    name: pre-build-scan
+    needs: test
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v4
+      - name: Do a SAST scan
+        run: semgrep scan --config auto
