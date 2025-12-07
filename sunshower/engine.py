@@ -32,6 +32,7 @@ def evaluate_team(team_profile: TeamProfile, task: str):
         "time_taken": time_taken,
     }
 
+
 def start(file_name: str):
     """
     The main entrypoint to sunshower.

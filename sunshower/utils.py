@@ -13,6 +13,7 @@ def get_experiment_set(file_name: str) -> ExperimentSet:
     with open(file_name, "r", encoding="UTF-8") as file:
         return ExperimentSet(**safe_load(file))
 
+
 def build_team(team_profile: TeamProfile):
     graph = StateGraph(MessagesState)
     agent_names = []
