@@ -7,13 +7,13 @@ from typing import List
 # Third party imports.
 from langchain.tools import tool
 from pydantic import BaseModel, Field
-from typing import Any, Dict, List
+from typing import Any, List
 
 
 class Model(BaseModel):
     provider: str
     name: str
-    system_prompt: str = Field(alias="systemPrompt")
+    prompt: str
 
 
 class Harness(BaseModel):
@@ -50,7 +50,7 @@ class TeamProfile(BaseModel):
     agent_profiles: List[AgentProfile] = Field(alias="agents")
 
 
-class Metrics(str, Enum):
+class MetricType(str, Enum):
     ACCURACY = "accuracy"
     COMPLETENESS = "completeness"
     COST = "cost"
@@ -61,10 +61,13 @@ class Metrics(str, Enum):
     TRAJECTORY = "trajectory"
 
 
+class Metric(BaseModel):
+    type: MetricType = Field(alias="metric")
+    prompt: str
+
+
 class JudgeProfile(AgentProfile):
-    name: str
-    model: Model
-    metricsToEvaluate: Dict[Metrics, str]
+    metricsToEvaluate: List[Metric]
     teamsToEvaluate: List[str]
 
 
@@ -72,6 +75,7 @@ class Spec(BaseModel):
     task: str
     trials: int
     team_profiles: List[TeamProfile] = Field(alias="teams")
+    judge_profiles: List[JudgeProfile] = Field(alias="judges")
 
 
 class Metadata(BaseModel):

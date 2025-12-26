@@ -1,8 +1,9 @@
 """sunshower/engine.py"""
 
-# Stand library imports.
+# Standard library imports.
 from logging import ERROR
 from os import environ
+from textwrap import dedent
 from time import perf_counter
 
 # https://discuss.ray.io/t/how-to-set-ray-dedup-logs-0/10465/11
@@ -11,11 +12,12 @@ environ["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = (
 )
 
 # Third party imports.
+from langchain.agents import create_agent
 from langchain_core.load import dumps
 from ray import get, init, is_initialized, remote, shutdown
 
 # Local imports.
-from sunshower.schema import TeamProfile
+from sunshower.schema import Spec, TeamProfile
 from sunshower.utils import build_team, get_experiment_set
 
 
@@ -31,6 +33,37 @@ def evaluate_team(team_profile: TeamProfile, task: str):
         "messages": output["messages"],
         "time_taken": time_taken,
     }
+
+
+def run_judge(spec: Spec):
+    with open(file="results.ndjson", mode="r", encoding="UTF-8") as output_file:
+        results = output_file.readlines()
+
+    for judge_profile in spec.judge_profiles:
+        judge = create_agent(
+            model=judge_profile.model.name,
+            tools=judge_profile.harness.tools,
+            system_prompt=judge_profile.model.prompt,
+        )
+        metrics = []
+        for metricToEvaluate in judge_profile.metricsToEvaluate:
+            metric = dedent(
+                f"""
+                ## {metricToEvaluate.type} Requirements  
+                {metricToEvaluate.prompt}
+            """
+            )
+            metrics.append(metricToEvaluate)
+
+        team_output = dedent(
+            f"""
+            ## Agent Output
+            {results}
+        """
+        )
+        metrics.append(team_output)
+        task = "\n\n".join([str(metric) for metric in metrics])
+    return judge.invoke({"messages": [{"role": "user", "content": task}]})
 
 
 def start(file_name: str):
@@ -58,7 +91,7 @@ def start(file_name: str):
             )
             object_references.append(object_reference)
 
-    # Get the output of each experiment.
+    # Save the output of each experiment.
     with open(file="results.ndjson", mode="w", encoding="UTF-8") as output_file:
         objects = get(object_references)
         for object in objects:
@@ -66,3 +99,5 @@ def start(file_name: str):
 
     # Shutdown the Ray cluster.
     shutdown()
+    judgement = run_judge(experiment_set.spec)
+    print(dumps(judgement))
