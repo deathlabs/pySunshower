@@ -1,8 +1,8 @@
-# `sunshower`
-A Python library for evaluating AI agents in a declarative way.
+# pySunshower
+`pySunshower` is a Python library for evaluating AI agents in a declarative way.
 
 ## Installation
-The instructions below explain how to install `sunshower`.
+The instructions below explain how to install `pySunshower`.
 
 **Step 1.** Clone this repository and change directories to it.
 ```bash
@@ -26,7 +26,7 @@ pip install -r requirements
 ```
 
 ## Usage
-The instructions below provide an example of using `sunshower` (they assume you are using VS Code in a Linux-based environment and have already completed the [Installation](#installation) instructions above).
+The instructions below provide an example of using `pySunshower` (they assume you are using VS Code in a Linux-based environment and have already completed the [Installation](#installation) instructions above).
 
 **Step 1.** Add `ipykernel`, `ipywidgets`, `langchain`, and `matplotlib` to your Python virtual environment.
 ```bash

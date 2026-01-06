@@ -22,7 +22,7 @@ def build_team(team_profile: TeamProfile):
         agent = create_agent(
             model=agent_profile.model.name,
             tools=agent_profile.harness.tools,
-            system_prompt=agent_profile.model.system_prompt,
+            system_prompt=agent_profile.model.prompt,
         )
         graph.add_node(agent_profile.name, agent)
     graph.add_edge(START, agent_names[0])
