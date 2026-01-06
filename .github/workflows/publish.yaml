@@ -4,8 +4,6 @@ on:
     workflows: [ "Integrate" ]
     types:
       - completed
-  release:
-    types: [ created ]
 jobs:
   pypi:
     name: Publish to PyPI
