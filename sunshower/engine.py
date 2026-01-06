@@ -99,5 +99,6 @@ def start(file_name: str):
 
     # Shutdown the Ray cluster.
     shutdown()
-    judgement = run_judge(experiment_set.spec)
-    print(dumps(judgement))
+    with open(file="results.md", mode="w", encoding="UTF-8") as results_markdown:
+        judgement = run_judge(experiment_set.spec)
+        results_markdown.write(f"{dumps(judgement)}\n")
