@@ -8,7 +8,9 @@
 * [Usage](#usage)
 
 ## Overview
-Not all AI agents are created equal. In the design phase of system development, choosing the right harness and model is critical. `pySunshower` automates this decision-making process by running trials in parallel and using an LLM to score the results.
+Not all AI agents are created equal. In the design phase of system development, choosing the right harness and model is critical. `pySunshower` automates this decision-making process by running trials in parallel and using an LLM to score the results.  
+
+![diagram](diagram.png)
 
 ## Features
 * **Declarative**: Define your entire experiment (teams, models, harnesses, and metrics) in YAML
