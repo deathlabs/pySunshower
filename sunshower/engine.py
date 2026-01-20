@@ -47,16 +47,14 @@ def run_judge(spec: Spec):
         )
         metrics = []
         for metricToEvaluate in judge_profile.metricsToEvaluate:
-            metric = dedent(
-                f"""
+            metric = dedent(f"""
                 ## {metricToEvaluate.type} Requirements  
                 {metricToEvaluate.prompt}
             """
             )
             metrics.append(metricToEvaluate)
 
-        team_output = dedent(
-            f"""
+        team_output = dedent(f"""
             ## Agent Output
             {results}
         """
