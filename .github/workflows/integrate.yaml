@@ -1,7 +1,8 @@
 ---
 name: Integrate
 on:
-  push
+  push:
+    tags: [ "!**" ]
 jobs:
   secrets:
     name: Secrets
