@@ -38,13 +38,11 @@ jobs:
       - name: Generate an SBOM
         uses: anchore/sbom-action@v0
         with:
-          format: cyclonedx-json
           path: .
           output-file: sbom.json
       - name: Check for CVEs
         uses: anchore/scan-action@v3
         with:
-          format: cyclonedx-json
           sbom: sbom.json
           severity-cutoff: high
   sast:
