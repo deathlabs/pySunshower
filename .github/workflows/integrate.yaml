@@ -1,7 +1,8 @@
 ---
 name: Integrate
 on:
-  push
+  push:
+    branches: [ "**" ]
 jobs:
   secrets:
     name: Secrets
